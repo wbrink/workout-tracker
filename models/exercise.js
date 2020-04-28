@@ -42,9 +42,30 @@ const ExerciseSchema = new Schema({
 })
 
 
-// make validation so the right fields are filled out according to if cardio or resistance is chosen
+// error handling middleware (only fires when error after save) This is made in case there is duplicate key error
+ExerciseSchema.post("save", function (err,doc,next) {
+  if (err.name === "MongoError" && err.code === 11000) {
+    next(new Error("Name must be unique"));
+  } else {
+    next(err); // in case different error send this, or send null
+  }
+}); 
+
+
+// example usage in creating documents
+/*
+var people = [{ name: 'Axl Rose' }, { name: 'Slash' }];
+Person.create(people, function(error) {
+  Person.update({ name: 'Slash' }, { $set: { name: 'Axl Rose' } }, function(error) {
+    // `error.message` will be "There was a duplicate key error"
+  });
+});
+*/
+
 
 const Exercise = mongoose.model("Exercise", ExerciseSchema);
+
+
 
 
 

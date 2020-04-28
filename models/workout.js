@@ -3,9 +3,6 @@ const Schema = mongoose.Schema;
 
 
 const WorkoutSchema = new Schema({
-  name: {
-
-  },
   exercises: [
     {
       type: Schema.Types.ObjectId,
@@ -13,6 +10,7 @@ const WorkoutSchema = new Schema({
     }
   ]
 })
+
 
 const Workout = mongoose.model("Workout", WorkoutSchema)
 

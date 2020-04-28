@@ -1,24 +1,37 @@
 const express = require("express");
 const app = express();
 const path = require("path");
+const mongoose = require("mongoose");
 
+// connect mongoose db (the options are required to get rid of depracation warnings)
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true
+});
+
+// application constants
+const mongoose_db = mongoose.connection;
 const publicDir = path.join(__dirname, "public");
 const PORT = 8080;
 
+// express middleware
 app.use(express.static(publicDir));
-
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 
 
-// use the html routes
+// use the html & api routes
 app.use(require("./routes/html_routes"));
-
-// use the api routes
 app.use(require("./routes/api_routes"));
 
-app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
 
+// when the db opens then start our application
+mongoose_db.on("open", function() {
+  app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
+});
 
-
-// workouts contain excercises
+// on error opening database
+mongoose_db.on("error", function() {
+  console.error("database failed to open");
+})

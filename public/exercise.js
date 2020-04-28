@@ -17,6 +17,7 @@ const newWorkout = document.querySelector(".new-workout")
 let workoutType = null;
 let shouldNavigateAway = false;
 
+//get the exercise id from the query selector (if undefined createWorkout in api.js)
 async function initExercise() {
   let workout;
 
@@ -32,6 +33,7 @@ async function initExercise() {
 
 initExercise();
 
+// eventListenerCallback: depending on workout type, display the appropriate fields
 function handleWorkoutTypeChange(event) {
   // gets the value of the selected item
   workoutType = event.target.value;
@@ -50,6 +52,7 @@ function handleWorkoutTypeChange(event) {
   validateInputs();
 }
 
+// validate inputs
 function validateInputs() {
   let isValid = true;
 
@@ -96,6 +99,7 @@ function validateInputs() {
   }
 }
 
+// form submit handler: get data and calls api.js addExcercise
 async function handleFormSubmit(event) {
   event.preventDefault();
 
@@ -130,7 +134,7 @@ function handleToastAnimationEnd() {
 }
 
 
-// clear the inputs
+// clear the inputs (called when the form is submitted)
 function clearInputs() {
   cardioNameInput.value = "";
   nameInput.value = "";
@@ -142,6 +146,8 @@ function clearInputs() {
   weightInput.value = "";
 }
 
+
+// event listeners
 // workout select change
 if (workoutTypeSelect) {
   workoutTypeSelect.addEventListener("change", handleWorkoutTypeChange);
