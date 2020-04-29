@@ -120,7 +120,9 @@ async function handleFormSubmit(event) {
   }
 
   // sends workout type 
+  console.log("here");
   await API.addExercise(workoutData);
+  console.log("here2");
   clearInputs();
   toast.classList.add("success");
 }

@@ -5,11 +5,16 @@ const Schema = mongoose.Schema;
 
 // Cardio Schema
 const ExerciseSchema = new Schema({
+  type: {
+    type: String,
+    required: true
+  },
+
   name: {
     type: String,
     maxlength: 100, 
     required: true,
-    unique: true
+    // unique: true
   },
 
   // distance and duration fields are if the exercise type is cardio
@@ -43,13 +48,13 @@ const ExerciseSchema = new Schema({
 
 
 // error handling middleware (only fires when error after save) This is made in case there is duplicate key error
-ExerciseSchema.post("save", function (err,doc,next) {
-  if (err.name === "MongoError" && err.code === 11000) {
-    next(new Error("Name must be unique"));
-  } else {
-    next(err); // in case different error send this, or send null
-  }
-}); 
+// ExerciseSchema.post("save", function (err,doc,next) {
+//   if (err.name === "MongoError" && err.code === 11000) {
+//     next(new Error("Name must be unique"));
+//   } else {
+//     next(err); // in case different error send this, or send null
+//   }
+// }); 
 
 
 // example usage in creating documents
