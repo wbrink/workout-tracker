@@ -20,13 +20,11 @@ const ExerciseSchema = new Schema({
   // distance and duration fields are if the exercise type is cardio
   distance: {
     type: Number,
-    required: true,
     min: [0, "Must Enter value greater than 0"],
     max: 1000,
   },
   duration: {
     type: Number,
-    required: true,
     min: [0, "Must Enter value greater than 0"],
     max: 1000,
   },

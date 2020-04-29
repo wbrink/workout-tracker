@@ -7,7 +7,7 @@ const router = express.Router();
 router.route("/api/workouts")
   //GET: return all the workouts
   .get((req,res) => {
-    db.Workout.find({}, function(err, docs) {
+    db.Workout.find({}).populate("exercises").exec(function(err, docs) {
       if (err) {
         console.log(err);
       } else {
@@ -15,6 +15,8 @@ router.route("/api/workouts")
       }
     })
   })
+    
+  
 
   // POST: post a single workout to database
   .post((req,res) => {
@@ -56,7 +58,16 @@ router.put('/api/workouts/:id', async (req,res) => {
 
 
 router.get("/api/workouts/range", (req,res) => {
-  res.json({});
+  let endDate = new Date();
+
+  // example of finding items between date
+  db.Workout.find({day: {$lte : endDate} }).populate("exercises").exec(function(err, docs) {
+    if (err) {
+      throw err;
+    } else {
+      res.json(docs);
+    }
+  })
 })
 
 
@@ -96,7 +107,7 @@ function handleCardioUpdate(type, name, distance, duration, workoutID) {
       } else {
         console.log(doc);
         exercise_id = doc._id;
-        db.Workout.updateOne({_id: workoutID}, {$push: {exercises: exercise_id}}, function(err, res) {
+        db.Workout.updateOne({_id: workoutID}, {$push: {exercises: exercise_id}, $inc: {totalDuration: duration}}, function(err, res) {
           if (err) {
             return reject("Could not update Workout Collection");
           }
@@ -123,7 +134,7 @@ function handleResistanceUpdate(type, name, weight, sets, reps, duration, workou
       } else {
         console.log(doc);
         exercise_id = doc._id;
-        db.Workout.updateOne({_id: workoutID}, {$push: {exercises: exercise_id}}, function(err, res) {
+        db.Workout.updateOne({_id: workoutID}, {$push: {exercises: exercise_id}, $inc: {totalDuration: duration}}, function(err, res) {
           if (err) {
             return reject("Could not update Workout Collection");
           }
