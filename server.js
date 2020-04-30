@@ -13,7 +13,7 @@ mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", {
 // application constants
 const mongoose_db = mongoose.connection;
 const publicDir = path.join(__dirname, "public");
-const PORT = 8080;
+const PORT = process.env.PORT || 3000;
 
 // express middleware
 app.use(express.static(publicDir));
